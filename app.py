@@ -8,6 +8,7 @@ from queries import VENDAS_QUERY, VENDAS_GRUPO_QUERY, PRODUTOS_MAIS_VENDIDOS_QUE
 import locale
 from babel.numbers import format_currency
 import plotly.graph_objects as go
+import platform
 from streamlit import container
 import logging
 from users_manager import authenticate
@@ -24,8 +25,14 @@ logging.basicConfig(
 )
 
 def init_session_state():
-    # Configurar locale para formatação BR
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+    try:
+        if platform.system() == "Windows":
+            locale.setlocale(locale.LC_ALL, "Portuguese_Brazil.1252")
+        else:
+            locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
+    except locale.Error:
+        # fallback
+        locale.setlocale(locale.LC_ALL, "")
     
     if 'logged_in' not in st.session_state:
         st.session_state.logged_in = False
@@ -390,7 +397,7 @@ def main_page():
             if (st.session_state.last_query_params != current_params):
                 with st.spinner('Consultando dados...'):
                     try:
-                        data = fetch_api_data(user_data['urlapi'], st.session_state.company_data['cnpj'], 
+                        data = fetch_api_data(st.session_state.company_data['urlapi'], st.session_state.company_data['cnpj'], 
                                             data_inicial.strftime('%Y-%m-%d'), 
                                             data_final.strftime('%Y-%m-%d'))
                         st.session_state.api_data = data
@@ -517,8 +524,6 @@ def main_page():
                         use_container_width=True,
                         hide_index=True
                     )
-                else:
-                    st.info("Consulte os dados para visualizar as despesas")
 
 def main():
     init_session_state()
