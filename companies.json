@@ -1,0 +1,84 @@
+{
+    "companies": [
+        {
+            "nome": "MASTER BOI - FILIAL 01 BETA",
+            "cnpj": "26288583000191",
+            "urlapi": "http://38.210.211.83:8095/resulth/getjsonbyquery",
+            "config": {
+                "CCMercRevenda": "0207002",
+                "CCMateriaPrima": "0207003",
+                "CCTransferencia": "0205001",
+                "CCCompraExtra": "0207001",
+                "CCBuscaVencimento": "0205002",
+                "CCFinanciamento": "0205003",
+                "CCRetiradaSocios": "0209008",
+                "DeducaoDespesa": "0208001",
+                "OutrasReceitas": "0208002",
+                "ContaAgrupaCaixa.01": "0201",
+                "ContasBancarias.01": "0205",
+                "ConsideraPDV": true,
+                "DiferencaCentroCusto": "0.01"
+            }
+        },
+        {
+            "nome": "MASTER BOI - FILIAL 02 DEP",
+            "cnpj": "25235538000106",
+            "urlapi": "http://38.210.211.83:8095/resulth/getjsonbyquery",
+            "config": {
+                "CCMercRevenda": "0207002",
+                "CCMateriaPrima": "0207003",
+                "CCTransferencia": "0205001",
+                "CCCompraExtra": "0207001",
+                "CCBuscaVencimento": "0205002",
+                "CCFinanciamento": "0205003",
+                "CCRetiradaSocios": "0209008",
+                "DeducaoDespesa": "0208001",
+                "OutrasReceitas": "0208002",
+                "ContaAgrupaCaixa.01": "0201",
+                "ContasBancarias.01": "0205",
+                "ConsideraPDV": true,
+                "DiferencaCentroCusto": "0.01"
+            }
+        },
+        {
+            "nome": "MASTER BOI - FILIAL 03 RP",
+            "cnpj": "22802628000143",
+            "urlapi": "http://38.210.211.83:8095/resulth/getjsonbyquery",
+            "config": {
+                "CCMercRevenda": "0207002",
+                "CCMateriaPrima": "0207003",
+                "CCTransferencia": "0205001",
+                "CCCompraExtra": "0207001",
+                "CCBuscaVencimento": "0205002",
+                "CCFinanciamento": "0205003",
+                "CCRetiradaSocios": "0209008",
+                "DeducaoDespesa": "0208001",
+                "OutrasReceitas": "0208002",
+                "ContaAgrupaCaixa.01": "0201",
+                "ContasBancarias.01": "0205",
+                "ConsideraPDV": true,
+                "DiferencaCentroCusto": "0.01"
+            }
+        },
+        {
+            "nome": "MASTER BOI - FILIAL 04",
+            "cnpj": "26288583000272",
+            "urlapi": "http://38.210.211.83:8095/resulth/getjsonbyquery",
+            "config": {
+                "CCMercRevenda": "0207002",
+                "CCMateriaPrima": "0207003",
+                "CCTransferencia": "0205001",
+                "CCCompraExtra": "0207001",
+                "CCBuscaVencimento": "0205002",
+                "CCFinanciamento": "0205003",
+                "CCRetiradaSocios": "0209008",
+                "DeducaoDespesa": "0208001",
+                "OutrasReceitas": "0208002",
+                "ContaAgrupaCaixa.01": "0201",
+                "ContasBancarias.01": "0205",
+                "ConsideraPDV": true,
+                "DiferencaCentroCusto": "0.01"
+            }
+        }
+    ]
+}

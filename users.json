@@ -1,0 +1,34 @@
+{
+    "users": [
+        {
+            "username": "admin",
+            "password": "123456",
+            "email": "admin@exemplo.com",
+            "is_admin": true,
+            "empresas_vinculos": [
+                "25235538000106",
+                "26288583000191",
+                "22802628000143",
+                "26288583000272"
+            ]
+        },
+        {
+            "username": "user1",
+            "password": "123456",
+            "email": "user12@exemplo.com",
+            "is_admin": false,
+            "empresas_vinculos": [
+                "25235538000106"
+            ]
+        },
+        {
+            "username": "user2",
+            "password": "user2",
+            "email": "user2@gmail.com",
+            "is_admin": false,
+            "empresas_vinculos": [
+                "25235538000106"
+            ]
+        }
+    ]
+}
