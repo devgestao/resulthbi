@@ -8,6 +8,6 @@ ENV/
 .streamlit/
 .idea/
 .vscode/
-create_repo.ps1
 *.log
 api_calls.log
+.streamlit/config.toml

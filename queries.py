@@ -82,7 +82,8 @@ union all
 PRODUTOS_MAIS_VENDIDOS_QUERY = """SELECT
     filiais.nomeempresa AS TEXTO_NOMEEMPRESA,
     produto.codprod || ' - ' || produto.descricao AS TEXTO_PRODUTO,
-    ROUND(SUM(pedidoi.quantidade),2) AS QUANTIDADE_VENDIDA
+    ROUND(SUM(pedidoi.quantidade),2) AS QUANTIDADE_VENDIDA,
+    ROUND(SUM(pedidoi.totalrateado),2) AS VALOR_VENDA
 FROM
     produto
 JOIN
