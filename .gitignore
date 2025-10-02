@@ -5,9 +5,11 @@ __pycache__/
 .venv
 venv/
 ENV/
-.streamlit/
+.streamlit/config.toml
 .idea/
 .vscode/
 *.log
 api_calls.log
-.streamlit/config.toml
+users.json
+companies.json
+create_repo.ps1
