@@ -146,10 +146,6 @@ def create_metric_card(title, value, prefix="R$", delta=None, color="#00BFFF"):
             font-weight: bold;
             margin-top: 10px;
         }}
-        div[data-testid="stHorizontalBlock"] > div {{
-            flex: 1;
-            width: calc(33.33% - 10px) !important;
-        }}
         .block-container {{
             padding: 2rem 1rem 1rem !important;
             max-width: 100vw;
@@ -203,11 +199,13 @@ def create_payment_chart(data):
     ])
     
     fig.update_layout(
+    dragmode=False,
+    xaxis=dict(fixedrange=True),
         title='Vendas por Forma de Pagamento',
         showlegend=False,
         plot_bgcolor='white',
         height=500,
-        yaxis=dict(showgrid=True, gridwidth=1, gridcolor='LightGray'),
+        yaxis=dict(fixedrange=True,showgrid=True, gridwidth=1, gridcolor='LightGray'),
         margin=dict(l=10, r=10, t=40, b=20),
         paper_bgcolor='white',
     )
@@ -245,6 +243,8 @@ def create_groups_chart(data):
     ))
     
     fig.update_layout(
+    dragmode=False,
+    xaxis=dict(fixedrange=True),
         title='Vendas por Grupo de Produtos',
         barmode='group',
         showlegend=True,
@@ -258,6 +258,7 @@ def create_groups_chart(data):
         plot_bgcolor='white',
         height=400,
         yaxis=dict(
+            fixedrange=True,
             title="Valor (R$)",
             tickfont=dict(color="#2E8B57"),
             showgrid=True,
@@ -266,6 +267,7 @@ def create_groups_chart(data):
             side='left'
         ),
         yaxis2=dict(
+            fixedrange=True,
             title="Quantidade (Kg)",
             tickfont=dict(color="#4169E1"),
             showgrid=False,
@@ -279,31 +281,65 @@ def create_groups_chart(data):
     return fig
 
 def create_top_products_chart(data):
+    # Ordenar por valor de venda (assumindo que existe o campo VALOR_VENDA)
+    sorted_data = sorted(data, key=lambda x: float(x['VALOR_VENDA']), reverse=True)[:10]
+    
     fig = go.Figure()
     
-    # Inverter a ordem para mostrar do maior para o menor de baixo para cima
-    produtos = list(reversed([d['TEXTO_PRODUTO'] for d in data]))
-    quantidades = list(reversed([d['QUANTIDADE_VENDIDA'] for d in data]))
-    
+    # Barra de valores (eixo Y primário)
     fig.add_trace(go.Bar(
-        y=produtos,
-        x=quantidades,
+        name='Valor (R$)',
+        y=[d['TEXTO_PRODUTO'] for d in reversed(sorted_data)],
+        x=[float(d['VALOR_VENDA']) for d in reversed(sorted_data)],
         orientation='h',
-        text=[f"{q:,.2f} Kg" for q in quantidades],
+        text=[format_currency(float(d['VALOR_VENDA']), 'BRL', locale='pt_BR') for d in reversed(sorted_data)],
         textposition='auto',
-        marker_color='#1f77b4'
+        marker_color='#2E8B57',
+        offsetgroup=0
+    ))
+    
+    # Barra de quantidade (eixo Y secundário)
+    fig.add_trace(go.Bar(
+        name='Quantidade (Kg)',
+        y=[d['TEXTO_PRODUTO'] for d in reversed(sorted_data)],
+        x=[float(d['QUANTIDADE_VENDIDA']) for d in reversed(sorted_data)],
+        orientation='h',
+        text=[f"{float(d['QUANTIDADE_VENDIDA']):,.2f} Kg" for d in reversed(sorted_data)],
+        textposition='auto',
+        marker_color='#4169E1',
+        offsetgroup=1,
+        xaxis='x2'
     ))
     
     fig.update_layout(
-        title='Top 15 Produtos Mais Vendidos (Kg)',
-        showlegend=False,
+        dragmode=False,
+        yaxis=dict(fixedrange=True),
+        title='Top 10 Produtos Mais Vendidos',
+        barmode='group',
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1
+        ),
         plot_bgcolor='white',
         height=600,
         xaxis=dict(
-            title="Quantidade (Kg)",
+            fixedrange=True,
+            title="Valor (R$)",
             showgrid=True,
             gridwidth=1,
-            gridcolor='LightGray'
+            gridcolor='LightGray',
+            side='bottom'
+        ),
+        xaxis2=dict(
+            fixedrange=True,
+            title="Quantidade (Kg)",
+            showgrid=False,
+            side='top',
+            overlaying='x'
         ),
         margin=dict(l=10, r=10, t=40, b=20),
         paper_bgcolor='white'
@@ -327,11 +363,14 @@ def create_expenses_chart(data):
     ))
     
     fig.update_layout(
+    dragmode=False,
+    yaxis=dict(fixedrange=True),
         title='Top 15 Maiores Despesas',
         showlegend=False,
         plot_bgcolor='white',
         height=500,
         xaxis=dict(
+            fixedrange=True,
             title="Valor (R$)",
             showgrid=True,
             gridwidth=1,
@@ -383,9 +422,17 @@ def main_page():
                 
         col1, col2 = st.columns(2)
         with col1:
-            data_inicial = st.date_input("Data Inicial", value=datetime.now())
+            data_inicial = st.date_input(
+                "Data Inicial",
+                value=datetime.now(),
+                format="DD/MM/YYYY"
+            )
         with col2:
-            data_final = st.date_input("Data Final", value=datetime.now())
+            data_final = st.date_input(
+                "Data Final",
+                value=datetime.now(),
+                format="DD/MM/YYYY"
+            )
         
         if st.button("Consultar"):
             current_params = {
@@ -457,7 +504,7 @@ def main_page():
                 
                 with left_col:
                     # Primeira linha - 3 cards principais
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3 = st.columns([1, 1, 1])
                     with col1:
                         create_metric_card("Vendas Totais", data_vendas['VALOR_TOTALVENDAS'], color="#2E8B57")
                     with col2:
@@ -466,7 +513,7 @@ def main_page():
                         create_metric_card("Qtd. Vendas", data_vendas['TEXTO_QUANTIDADEVENDAS'], prefix="", color="#8A2BE2")
                     
                     # Segunda linha - 3 cards
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3 = st.columns([1, 1, 1])
                     with col1:
                         create_metric_card("Vendas Dinheiro", data_vendas['VALOR_VENDADINHEIRO'], color="#20B2AA")
                     with col2:
@@ -475,7 +522,7 @@ def main_page():
                         create_metric_card("Vendas POS", data_vendas['VALOR_VENDAPOS'], color="#DAA520")
                     
                     # Terceira linha - 3 cards
-                    col1, col2, col3 = st.columns(3)
+                    col1, col2, col3 = st.columns([1, 1, 1])
                     with col1:
                         create_metric_card("Vendas Cheque", data_vendas['VALOR_VENDACHEQUE'], color="#FF4500")
                     with col2:
@@ -524,6 +571,7 @@ def main_page():
                         use_container_width=True,
                         hide_index=True
                     )
+
 
 def main():
     init_session_state()
